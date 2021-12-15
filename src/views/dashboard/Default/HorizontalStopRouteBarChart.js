@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
 import { Bar } from 'react-chartjs-2';
-import { Grid, MenuItem, TextField, Typography } from '@mui/material';
+import { Grid, MenuItem, TextField, Typography, Button, Box } from '@mui/material';
 
 // third-party
 import axios from 'axios';
@@ -11,10 +11,11 @@ import SkeletonTotalGrowthBarChart from 'ui-component/cards/Skeleton/TotalGrowth
 import MainCard from 'ui-component/cards/MainCard';
 import { gridSpacing } from 'store/constant';
 import { gridPaginationSelector } from '@mui/x-data-grid';
-import faker from 'faker';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
-
+const buttonStyle = {
+    marginRight: '10px'
+};
 const options = {
     indexAxis: 'y',
     elements: {
@@ -38,30 +39,51 @@ const options = {
         }
     }
 };
-const baseURL = 'http://127.0.0.1:5000/stopbarchart';
+const baseURL = 'http://localhost:5000/stopbarchart';
 
 const HorizontalStopRouteBarChart = ({ isLoading, SelectedStop }) => {
-    const [OnboardingData, setOnboardingData] = useState('');
-    const [ElidingData, setElidingData] = useState('');
+    const [DepartureData, setDepartureData] = useState('');
+    const [ArrivalData, setArrivalData] = useState('');
+    const [ButtonStatus, setButtonStatus] = useState('Departures');
 
     useEffect(() => {
         axios.get(`${baseURL}`, { params: { stop: SelectedStop } }).then((response) => {
-            setOnboardingData(response.data.onboarding);
-            setElidingData(response.data.eliding);
-            console.log('shit');
-            console.log(response.data.onboarding);
+            setDepartureData(response.data.departures);
+            setArrivalData(response.data.arrivals);
         });
     }, [SelectedStop]);
-
+    const handleButtonStatusChange = (event) => {
+        setButtonStatus(event.target.value);
+    };
     return (
         <>
-            {isLoading || OnboardingData === undefined || OnboardingData === '' || ElidingData === undefined ? (
+            {isLoading || DepartureData === undefined || ArrivalData === '' || ArrivalData === undefined ? (
                 <SkeletonTotalGrowthBarChart height="20%" />
             ) : (
                 <MainCard>
+                    <Box display="flex" width="100%" justifyContent="center" alignItems="center">
+                        <Button
+                            value="Departures"
+                            onClick={handleButtonStatusChange}
+                            variant={ButtonStatus === 'Departures' ? 'contained' : 'Outline'}
+                            size="Medium"
+                            style={buttonStyle}
+                        >
+                            Departures
+                        </Button>
+
+                        <Button
+                            value="Arrivals"
+                            onClick={handleButtonStatusChange}
+                            variant={ButtonStatus === 'Arrivals' ? 'contained' : 'Outline'}
+                            size="Medium"
+                        >
+                            Arrivals
+                        </Button>
+                    </Box>
                     <Grid container spacing={gridSpacing}>
                         <Grid item xs={12}>
-                            <Bar height="400px" options={options} data={OnboardingData} />
+                            <Bar height="400px" options={options} data={ButtonStatus === 'Departures' ? DepartureData : ArrivalData} />
                         </Grid>
                     </Grid>
                 </MainCard>

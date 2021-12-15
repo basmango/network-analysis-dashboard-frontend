@@ -17,7 +17,7 @@ import { gridSpacing } from 'store/constant';
 import Box from '@mui/material/Box';
 import { border } from '@mui/system';
 
-const baseURL = 'http://127.0.0.1:5000/routes';
+const baseURL = 'http://localhost:5000/routes';
 
 // ==============================|| DEFAULT DASHBOARD ||============================== //
 const DateStyle = {
@@ -49,22 +49,6 @@ const RouteDisplay = ({ isLoading }) => {
                     <Grid item xs={3}>
                         <RouteFormControl isLoading={isNetLoading} onChange={changeRouteCallback} items={items} Route={Route} />
                     </Grid>
-                    <LocalizationProvider dateAdapter={AdapterDateFns}>
-                        <Grid item xs={5}>
-                            <DateRangePicker
-                                label="Advanced keyboard"
-                                value={value}
-                                onChange={(newValue) => setValue(newValue)}
-                                renderInput={(startProps, endProps) => (
-                                    <fragment>
-                                        <input ref={startProps.inputRef} {...startProps.inputProps} style={DateStyle} />
-                                        <span> to </span>
-                                        <input ref={endProps.inputRef} {...endProps.inputProps} style={DateStyle} />
-                                    </fragment>
-                                )}
-                            />
-                        </Grid>
-                    </LocalizationProvider>
                 </Grid>
             </Grid>
             <Grid item xs={12}>

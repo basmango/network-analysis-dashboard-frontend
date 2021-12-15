@@ -4,7 +4,7 @@ import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import NativeSelect from '@mui/material/NativeSelect';
 
-const baseURL = 'http://127.0.0.1:5000/routes';
+const baseURL = 'http://localhost:5000/routes';
 
 const RouteFormControl = ({ isLoading, onChange, items, Route }) => {
     const handleChange = (event) => {
