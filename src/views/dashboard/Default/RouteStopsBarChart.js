@@ -20,7 +20,7 @@ import { gridSpacing } from 'store/constant';
 import chartData from './chart-data/total-growth-bar-chart';
 import { gridPaginationSelector } from '@mui/x-data-grid';
 
-const baseURL = 'http://localhost:5000/chartdata';
+const baseURL = 'http://api.basmango.com/chartdata';
 
 const status = [
     {

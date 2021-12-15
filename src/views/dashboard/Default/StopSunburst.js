@@ -9,37 +9,15 @@ import SkeletonTotalGrowthBarChart from 'ui-component/cards/Skeleton/TotalGrowth
 import MainCard from 'ui-component/cards/MainCard';
 import { gridSpacing } from 'store/constant';
 import { gridPaginationSelector } from '@mui/x-data-grid';
-import { d3 } from 'd3';
+import { scaleOrdinal, schemePaired } from 'd3';
 
 const myChart = Sunburst();
 myChart.height(450);
 myChart.width(450);
 myChart.excludeRoot(true);
-const color = d3.scaleOrdinal(d3.schemePaired);
-const options = {
-    indexAxis: 'y',
-    elements: {
-        bar: {
-            borderWidth: 2
-        }
-    },
-    responsive: true,
-    plugins: {
-        title: {
-            display: true,
-            text: 'Stop Traffic Distribution'
-        }
-    },
-    scales: {
-        x: {
-            stacked: true
-        },
-        y: {
-            stacked: true
-        }
-    }
-};
-const baseURL = 'http://localhost:5000/stopsunburst';
+myChart.strokeColor('white');
+const color = scaleOrdinal(schemePaired);
+const baseURL = 'http://api.basmango.com/stopsunburst';
 
 const StopSunburst = ({ isLoading, SelectedStop }) => {
     const [ChartData, setChartData] = useState('');
@@ -51,6 +29,8 @@ const StopSunburst = ({ isLoading, SelectedStop }) => {
         if (document.getElementById('chart') != null) {
             document.getElementById('chart').innerHTML = '';
             myChart.data(ChartData)(document.getElementById('chart'));
+            myChart.color((d) => color(d.name));
+            myChart.strokeColor('white');
         }
     }, [SelectedStop]);
 

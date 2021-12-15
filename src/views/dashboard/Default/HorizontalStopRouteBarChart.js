@@ -39,7 +39,7 @@ const options = {
         }
     }
 };
-const baseURL = 'http://localhost:5000/stopbarchart';
+const baseURL = 'http://api.basmango.com/stopbarchart';
 
 const HorizontalStopRouteBarChart = ({ isLoading, SelectedStop }) => {
     const [DepartureData, setDepartureData] = useState('');

@@ -12,7 +12,7 @@ import MainCard from 'ui-component/cards/MainCard';
 import { gridSpacing } from 'store/constant';
 import { gridPaginationSelector } from '@mui/x-data-grid';
 
-const baseURL = 'http://localhost:5000/stopsankey';
+const baseURL = 'http://api.basmango.com/stopsankey';
 
 const StopSankey = ({ isLoading, Route, SelectedStop }) => {
     const [Data, setData] = useState('');

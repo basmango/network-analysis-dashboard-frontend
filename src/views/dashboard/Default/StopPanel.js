@@ -28,9 +28,6 @@ const StopPanel = ({ Route }) => {
                         <Grid item xs={5}>
                             <HorizontalStopRouteBarChart height="500px" Route={Route} SelectedStop={Stop} />
                         </Grid>
-                        <Grid item xs={4}>
-                            <StopSunburst height="500px" Route={Route} SelectedStop={Stop} />
-                        </Grid>
                     </Grid>
                 </Grid>
             </Grid>
