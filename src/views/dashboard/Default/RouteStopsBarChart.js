@@ -20,7 +20,7 @@ import { gridSpacing } from 'store/constant';
 import chartData from './chart-data/total-growth-bar-chart';
 import { gridPaginationSelector } from '@mui/x-data-grid';
 
-const baseURL = 'http://api.basmango.com/chartdata';
+const baseURL = 'http://localhost:5000/chartdata';
 
 const status = [
     {
@@ -73,7 +73,7 @@ const xdata = {
         }
     ]
 };
-const RouteStopsBarChart = ({ isLoading, Route }) => {
+const RouteStopsBarChart = ({ isLoading, Route, StartingDate, EndingDate }) => {
     const [value, setValue] = useState('today');
     const [data, setData] = useState('');
     const [isRequesting, setRequesting] = useState(false);
@@ -99,8 +99,8 @@ const RouteStopsBarChart = ({ isLoading, Route }) => {
     const primaryDark = theme.palette.primary.dark;
     const secondaryMain = theme.palette.secondary.main;
     const secondaryLight = theme.palette.secondary.light;
-    async function makeRequest(a, b) {
-        const response = await axios.get(`${a}`, { params: { route: b } });
+    async function makeRequest(a, b, c, d) {
+        const response = await axios.get(`${a}`, { params: { route: b, startingDate: c, endingDate: d } });
         return response.data;
     }
     const toggleRequesting = () => {
@@ -108,18 +108,11 @@ const RouteStopsBarChart = ({ isLoading, Route }) => {
     };
     useEffect(() => {
         async function test() {
-            console.log('route');
-            console.log(Route);
             setRequesting(true);
-            const responseData = await makeRequest(baseURL, Route);
-            console.log('test3');
-            console.log(responseData);
-
+            const responseData = await makeRequest(baseURL, Route, StartingDate, EndingDate);
             const newXItems = await responseData[0];
             const onboarding = await responseData[1];
             const eliding = await responseData[2];
-
-            console.log(onboarding);
             await setData({
                 labels: newXItems,
                 datasets: [
@@ -143,7 +136,7 @@ const RouteStopsBarChart = ({ isLoading, Route }) => {
 
         // do not load chart when loading
         test();
-    }, [navType, primary200, primaryDark, secondaryMain, secondaryLight, primary, darkLight, grey200, grey500, Route]);
+    }, [Route, StartingDate, EndingDate]);
 
     return (
         <>

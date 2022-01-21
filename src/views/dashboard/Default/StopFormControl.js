@@ -5,7 +5,7 @@ import FormControl from '@mui/material/FormControl';
 import NativeSelect from '@mui/material/NativeSelect';
 import axios from 'axios';
 
-const baseURL = 'http://api.basmango.com/stops';
+const baseURL = 'http://localhost:5000/stops';
 
 const StopFormControl = ({ isLoading, stop, onChange, Route }) => {
     const handleChange = (event) => {

@@ -1,37 +1,29 @@
 import { useEffect, useState } from 'react';
 
 // material-ui
-import { Grid, FormControl, MenuItem, Select, InputLabel } from '@mui/material';
+import { Grid, FormControl, MenuItem, Select, InputLabel, TextField } from '@mui/material';
 
 // project imports
 import * as React from 'react';
 import axios from 'axios';
-import TextField from '@mui/material/TextField';
 import RouteStopsBarChart from './RouteStopsBarChart';
 import RouteFormControl from './RouteFormControl';
 import StopPanel from './StopPanel';
-import DateRangePicker from '@mui/lab/DateRangePicker';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { gridSpacing } from 'store/constant';
 import Box from '@mui/material/Box';
 import { border } from '@mui/system';
+import DateTimeControlForm from './DateTimeControlForm';
 
-const baseURL = 'http://api.basmango.com/routes';
+const baseURL = 'http://localhost:5000/routes';
 
 // ==============================|| DEFAULT DASHBOARD ||============================== //
-const DateStyle = {
-    marginTop: '15px',
-    backgroundColor: 'transparent',
-    height: '30px',
-    fontSize: '15px',
-    padding: '4px'
-};
+
 const RouteDisplay = ({ isLoading }) => {
-    const [Route, setRoute] = React.useState('703UP');
-    const [value, setValue] = React.useState([null, null]);
+    const [Route, setRoute] = React.useState('03DOWN');
     const [isNetLoading, setNetLoading] = React.useState(true);
     const [items, setItem] = React.useState([]);
+    const [StartingDate, setStartingDate] = React.useState('');
+    const [EndingDate, setEndingDate] = React.useState('');
 
     React.useEffect(() => {
         axios.get(`${baseURL}`).then((response) => {
@@ -42,6 +34,12 @@ const RouteDisplay = ({ isLoading }) => {
     const changeRouteCallback = (newRoute) => {
         setRoute(newRoute);
     };
+    const ChangeStartingDateCallback = (newDate) => {
+        setStartingDate(newDate);
+    };
+    const ChangeEndingDateCallback = (newDate) => {
+        setEndingDate(newDate);
+    };
     return (
         <Grid container spacing={gridSpacing}>
             <Grid item xs={12}>
@@ -49,12 +47,27 @@ const RouteDisplay = ({ isLoading }) => {
                     <Grid item xs={3}>
                         <RouteFormControl isLoading={isNetLoading} onChange={changeRouteCallback} items={items} Route={Route} />
                     </Grid>
+                    <Grid item xs={4}>
+                        <DateTimeControlForm
+                            isLoading={isNetLoading}
+                            StartDateChangeCallback={ChangeStartingDateCallback}
+                            EndDateChangeCallback={ChangeEndingDateCallback}
+                            StartingDate={StartingDate}
+                            EndingDate={EndingDate}
+                        />
+                    </Grid>
                 </Grid>
             </Grid>
             <Grid item xs={12}>
                 <Grid container spacing={gridSpacing}>
                     <Grid item xs={12}>
-                        <RouteStopsBarChart height="200px" isLoading={isLoading} Route={Route} />
+                        <RouteStopsBarChart
+                            height="200px"
+                            isLoading={isLoading}
+                            Route={Route}
+                            StartingDate={StartingDate}
+                            EndingDate={EndingDate}
+                        />
                     </Grid>
                 </Grid>
             </Grid>
@@ -62,7 +75,7 @@ const RouteDisplay = ({ isLoading }) => {
             <Grid item xs={12}>
                 <Grid container spacing={gridSpacing}>
                     <Grid item xs={12}>
-                        <StopPanel isLoading={isNetLoading} Route={Route} />
+                        <StopPanel isLoading={isNetLoading} Route={Route} StartingDate={StartingDate} EndingDate={EndingDate} />
                     </Grid>
                 </Grid>
             </Grid>

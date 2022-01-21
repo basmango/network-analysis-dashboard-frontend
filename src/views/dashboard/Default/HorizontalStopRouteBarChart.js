@@ -5,6 +5,7 @@ import { Grid, MenuItem, TextField, Typography, Button, Box } from '@mui/materia
 
 // third-party
 import axios from 'axios';
+
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 // project imports
 import SkeletonTotalGrowthBarChart from 'ui-component/cards/Skeleton/TotalGrowthBarChart';
@@ -28,6 +29,9 @@ const options = {
         title: {
             display: true,
             text: 'Stop Traffic Distribution'
+        },
+        legend: {
+            display: false
         }
     },
     scales: {
@@ -39,19 +43,19 @@ const options = {
         }
     }
 };
-const baseURL = 'http://api.basmango.com/stopbarchart';
+const baseURL = 'http://localhost:5000/stopbarchart';
 
-const HorizontalStopRouteBarChart = ({ isLoading, SelectedStop }) => {
+const HorizontalStopRouteBarChart = ({ isLoading, SelectedStop, StartingDate, EndingDate }) => {
     const [DepartureData, setDepartureData] = useState('');
     const [ArrivalData, setArrivalData] = useState('');
     const [ButtonStatus, setButtonStatus] = useState('Departures');
 
     useEffect(() => {
-        axios.get(`${baseURL}`, { params: { stop: SelectedStop } }).then((response) => {
+        axios.get(`${baseURL}`, { params: { stop: SelectedStop, startingDate: StartingDate, endingDate: EndingDate } }).then((response) => {
             setDepartureData(response.data.departures);
             setArrivalData(response.data.arrivals);
         });
-    }, [SelectedStop]);
+    }, [SelectedStop, StartingDate, EndingDate]);
     const handleButtonStatusChange = (event) => {
         setButtonStatus(event.target.value);
     };
@@ -83,7 +87,7 @@ const HorizontalStopRouteBarChart = ({ isLoading, SelectedStop }) => {
                     </Box>
                     <Grid container spacing={gridSpacing}>
                         <Grid item xs={12}>
-                            <Bar height="400px" options={options} data={ButtonStatus === 'Departures' ? DepartureData : ArrivalData} />
+                            <Bar height="355px" options={options} data={ButtonStatus === 'Departures' ? DepartureData : ArrivalData} />
                         </Grid>
                     </Grid>
                 </MainCard>
